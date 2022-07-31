@@ -14,7 +14,7 @@ const Signin = ({handleRoute, loadUser}) => {
        setSignInPassword(event.target.value)
     }
     const onSubmitSignIn = () => {
-        fetch('http://localhost:3001/signin', {
+        fetch('https://smartfacesdetection-api.herokuapp.com/signin', {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({

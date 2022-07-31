@@ -79,7 +79,7 @@ function App() {
   const onPictureSubmit = () => {
     setImageUrl(input)
     setError(null)
-    fetch('http://localhost:3001/imageurl', {
+    fetch('https://smartfacesdetection-api.herokuapp.com/imageurl', {
           method: 'post',
           headers: {'Content-Type': 'application/json'},
           body:JSON.stringify({
@@ -90,7 +90,7 @@ function App() {
       if(response.ok) {
         return response.json()
         .then(facedata => {
-            fetch('http://localhost:3001/image', {
+            fetch('https://smartfacesdetection-api.herokuapp.com/image', {
               method: 'put',
               headers: {'Content-Type': 'application/json'},
               body:JSON.stringify({
