@@ -110,6 +110,5 @@ const Register = ({handleRoute, loadUser}) => {
         </>
     )
 }
-
 export default Register;    
                 
