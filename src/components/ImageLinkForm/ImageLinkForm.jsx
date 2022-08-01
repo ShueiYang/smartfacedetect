@@ -24,6 +24,5 @@ const ImageLinkForm =({handleChange, handleSumit}) => {
     )
 
 }
-
 export default ImageLinkForm;    
         
