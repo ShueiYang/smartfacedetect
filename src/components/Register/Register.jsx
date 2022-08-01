@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Errorform from "../Errorform";
+import Loading from "../Loading";
 
 const Register = ({handleRoute, loadUser}) => {
 
@@ -7,6 +8,7 @@ const Register = ({handleRoute, loadUser}) => {
     const [regEmail, setRegEmail] = useState("")
     const [regPassword, setRegPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
+    const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
 
     const onNameChange = (event) => {
@@ -23,6 +25,7 @@ const Register = ({handleRoute, loadUser}) => {
      }
 
     const onSubmitSignIn = () => {
+        setLoading(true)
         fetch('https://smartfacesdetection-api.herokuapp.com/register', {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
@@ -35,6 +38,7 @@ const Register = ({handleRoute, loadUser}) => {
         })
         .then(response => {
             if(response.ok) {
+                setLoading(false)
                 return response.json()
             .then(user => {
                 loadUser(user)    
@@ -53,8 +57,13 @@ const Register = ({handleRoute, loadUser}) => {
         { (error) ?
             <Errorform 
                 errorMessage= {`${error}`}
-                changeRoute= {()=> setError(null)}
-            /> 
+                changeRoute= {()=> {
+                    setError(null)
+                    setLoading(false)
+                }}
+            />
+        : (loading) ?
+            <Loading />  
         :   <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
                 <main className="pa4 black-80">
                     <div className="measure">
