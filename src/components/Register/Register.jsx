@@ -74,7 +74,7 @@ const Register = ({handleRoute, loadUser}) => {
                                 <input className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" 
                                     type="text" 
                                     name="name" 
-                                    d="name"
+                                    id="name"
                                     onChange = {onNameChange}
                                     />
                             </div>

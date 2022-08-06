@@ -85,7 +85,8 @@ const Signin = ({handleRoute, loadUser}) => {
                                 onClick = {onSubmitSignIn}/>
                         </div>
                         <div className="lh-copy mt3">
-                            <p onClick={() => handleRoute('register')} className="f6 link dim black db pointer">Register</p>
+                            <p onClick={() => handleRoute('register')} 
+                                className="f6 link dim black db pointer">Register</p>
                             {/* For this project I remove Forgot your password feature below */}
                             {/* <a href="#0" class="f6 link dim black db">Forgot your password?</a> */}
                         </div>
