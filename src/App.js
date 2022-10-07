@@ -99,20 +99,17 @@ function App() {
             })
             .then(resp => resp.json())
             .then(count => {
-              setUser({
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                entries: count,
-                joined: user.joined
-              })        
+              setUser(prevState => ({
+                ...prevState,
+                entries: count
+              }))
             })
             .catch(err => setError(err))
           
         displayFaceBox(calculateFaceLocation(facedata))
         })
             
-      } else if (response.status ===400) {
+      } else if (response.status === 400) {
         return response.json()
         .then(err => setError(err))
       }
@@ -167,7 +164,10 @@ function App() {
     </>
   );
 }
-export default App;  
+export default App;   
+                
+                     
+              
         
          
   
