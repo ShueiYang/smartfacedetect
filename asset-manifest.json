@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/smartfacedetect/static/css/main.e055533a.css",
-    "main.js": "/smartfacedetect/static/js/main.f195e271.js",
+    "main.js": "/smartfacedetect/static/js/main.032e0205.js",
     "static/js/787.fbf5db0f.chunk.js": "/smartfacedetect/static/js/787.fbf5db0f.chunk.js",
     "index.html": "/smartfacedetect/index.html",
     "main.e055533a.css.map": "/smartfacedetect/static/css/main.e055533a.css.map",
-    "main.f195e271.js.map": "/smartfacedetect/static/js/main.f195e271.js.map",
+    "main.032e0205.js.map": "/smartfacedetect/static/js/main.032e0205.js.map",
     "787.fbf5db0f.chunk.js.map": "/smartfacedetect/static/js/787.fbf5db0f.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e055533a.css",
-    "static/js/main.f195e271.js"
+    "static/js/main.032e0205.js"
   ]
 }
