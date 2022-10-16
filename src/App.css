@@ -60,3 +60,12 @@ hr {
   height: auto !important;
   border-color: hsl(200deg 24% 40%)
 }
+
+a {
+  color: #072b6e;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #99360f;
+}
