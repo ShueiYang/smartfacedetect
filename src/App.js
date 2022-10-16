@@ -7,6 +7,7 @@ import Particle from './components/Particle';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import Signin from './components/Signin/Signin';
 import Register from './components/Register/Register';
+import Footer from './components/Footer';
 import './App.css';
 
 
@@ -79,7 +80,7 @@ function App() {
   const onPictureSubmit = () => {
     setImageUrl(input)
     setError(null)
-    fetch('https://smartfacesdetection-api.herokuapp.com/imageurl', {
+    fetch('https://smartbrain-api-shueiyang.koyeb.app/imageurl', {
           method: 'post',
           headers: {'Content-Type': 'application/json'},
           body:JSON.stringify({
@@ -90,7 +91,7 @@ function App() {
       if(response.ok) {
         return response.json()
         .then(facedata => {
-            fetch('https://smartfacesdetection-api.herokuapp.com/image', {
+            fetch('https://smartbrain-api-shueiyang.koyeb.app/image', {
               method: 'put',
               headers: {'Content-Type': 'application/json'},
               body:JSON.stringify({
@@ -153,26 +154,21 @@ function App() {
             error={error}
           />          
         </div> 
-        : (route === 'signIn' ?       
-            <Signin handleRoute={onRouteChange}
-                    loadUser= {loadUser}/> 
-            : <Register handleRoute={onRouteChange}
-                        loadUser= {loadUser}/>
+        : (route === 'signIn' ?
+            <div className='Signin'>       
+              <Signin handleRoute={onRouteChange}
+                      loadUser= {loadUser}/>
+              <Footer/>
+            </div> 
+            : <div className='Signin'>
+                <Register handleRoute={onRouteChange}
+                            loadUser= {loadUser}/>
+                <Footer/>
+              </div>
           )
         }          
       </div>
     </>
   );
 }
-export default App;   
-                
-                     
-              
-        
-         
-  
-  
-  
-      
-
-  
+export default App; 

@@ -26,7 +26,7 @@ const Register = ({handleRoute, loadUser}) => {
 
     const onSubmitSignIn = () => {
         setLoading(true)
-        fetch('https://smartfacesdetection-api.herokuapp.com/register', {
+        fetch('https://smartbrain-api-shueiyang.koyeb.app/register', {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
