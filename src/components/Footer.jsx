@@ -7,7 +7,7 @@ const Footer = () => {
         <div className="footer">
             <div className="foot">  
                     <p> 
-                        &copy;{new Date().getFullYear()} Developed by ShueiYang   
+                        &copy;{new Date().getFullYear()} Developed from ZTM 
                     </p>
                 <hr/>
                     <p>
@@ -15,7 +15,7 @@ const Footer = () => {
                     </p>
                 <hr/>
                     <p>
-                        <a href="#!" rel="noreferrer"target="_blank">LinkedIn</a>
+                        <a href="https://www.linkedin.com/in/shueiyang" rel="noreferrer"target="_blank">LinkedIn</a>
                     </p>
             </div>
             <p className="mt0 mb4">
