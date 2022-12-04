@@ -148,6 +148,7 @@ function App() {
             handleChange={onInputChange}
             handleSumit={onPictureSubmit}
             faceCount={box}
+            error={error}
           />
           <FaceRecognition
             faceBox={box}
