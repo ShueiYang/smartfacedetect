@@ -33,7 +33,7 @@ const Signin = ({handleRoute, loadUser}) => {
                 loadUser(user)    
                 handleRoute('home') 
             })
-          } else if (response.status === 400) {
+          } else if (response.status >= 400) {
             return response.json()
             .then(err => setError(err))
           }

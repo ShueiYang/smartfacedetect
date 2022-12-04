@@ -44,8 +44,8 @@ function App() {
     const height = Number(image.height)
     const boxData = data.outputs[0].data.regions
     
-    if (boxData.length === 0) 
-      return null
+    if (boxData.length === 0)
+      return null;
     
     else if (boxData.length === 1) {
       const clarifyFace = data.outputs[0].data.regions[0].region_info.bounding_box
@@ -110,7 +110,7 @@ function App() {
         displayFaceBox(calculateFaceLocation(facedata))
         })
             
-      } else if (response.status === 400) {
+      } else if (response.status >= 400) {
         return response.json()
         .then(err => setError(err))
       }
@@ -147,6 +147,7 @@ function App() {
           <ImageLinkForm
             handleChange={onInputChange}
             handleSumit={onPictureSubmit}
+            faceCount={box}
           />
           <FaceRecognition
             faceBox={box}

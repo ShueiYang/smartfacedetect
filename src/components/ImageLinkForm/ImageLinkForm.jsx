@@ -2,9 +2,8 @@ import React from "react";
 
 
 
-const ImageLinkForm =({handleChange, handleSumit}) => {
-
-
+const ImageLinkForm =({handleChange, handleSumit, faceCount}) => {
+    
     return (
         <div>
             <p className="f3">
@@ -20,9 +19,12 @@ const ImageLinkForm =({handleChange, handleSumit}) => {
                         onClick = {handleSumit}> Detect </button>
                 </div>
             </div>
+            { (!faceCount) ? <p className="f3">{"No Face Detected !"}</p>
+              : (faceCount && !faceCount.length) ? <p className="f3">{"1 Face Detected !"}</p>
+              : (faceCount.length) && <p className="f3">{`${faceCount.length} Faces Detected !`}</p>
+            }
         </div>
     )
 
 }
-export default ImageLinkForm;    
-        
+export default ImageLinkForm; 
