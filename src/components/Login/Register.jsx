@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import Errorform from "../Errorform";
-import Loading from "../Loading";
+import Errorform from "./Errorform";
+import Loading from "./Loading";
+import Footer from "../Footer";
 
 const Register = ({handleRoute, loadUser}) => {
 
@@ -13,51 +14,55 @@ const Register = ({handleRoute, loadUser}) => {
 
     const onNameChange = (event) => {
         setRegName(event.target.value)
-    }
+    };
     const onEmailChange = (event) => {
         setRegEmail(event.target.value)
-    }
+    };
     const onPasswordChange = (event) => {
        setRegPassword(event.target.value)
-    }
+    };
     const onConfirmPassword = (event) => {
         setConfirmPassword(event.target.value)
-     }
+    };
+    const resetPassword = () => {
+        setRegPassword("")
+        setConfirmPassword("")
+    };
 
-    const onSubmitSignIn = () => {
+    const onSubmitSignIn = async () => {
         setLoading(true)
-        fetch('https://smartbrain-api-shueiyang.koyeb.app/register', {
-            method: 'post',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                name: regName,
-                email: regEmail,
-                password: regPassword,
-                checkpassword: confirmPassword
+        try {
+            const response = await fetch('https://smartbrain-api-shueiyang.koyeb.app/register', {
+                method: 'post',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    name: regName,
+                    email: regEmail,
+                    password: regPassword,
+                    checkpassword: confirmPassword
+                })
             })
-        })
-        .then(response => {
+            const user = await response.json();
             if(response.ok) {
                 setLoading(false)
-                return response.json()
-            .then(user => {
-                loadUser(user)    
-                handleRoute('home') 
-            })
-          } else if (response.status === 400) {
-            return response.json()
-            .then(err => setError(err))
-          }
-        })
-        .catch(err => setError(err))
-    }
+                loadUser(user)        
+                handleRoute('home')
+            } else if (response.status === 400) {
+                setError(user)
+            }
+        } catch (err) {
+            setError(err)
+        } finally {
+            resetPassword();
+        }
+    };
 
     return (
-        <>
+        <div className='Signin'> 
         { (error) ?
             <Errorform 
                 errorMessage= {`${error}`}
-                changeRoute= {()=> {
+                resetRoute= {()=> {
                     setError(null)
                     setLoading(false)
                 }}
@@ -75,6 +80,7 @@ const Register = ({handleRoute, loadUser}) => {
                                     type="text" 
                                     name="name" 
                                     id="name"
+                                    value={regName}
                                     onChange = {onNameChange}
                                     />
                             </div>
@@ -84,6 +90,7 @@ const Register = ({handleRoute, loadUser}) => {
                                     type="email" 
                                     name="email-address" 
                                     id="email-address"
+                                    value={regEmail}
                                     onChange = {onEmailChange}
                                     />
                             </div>
@@ -111,13 +118,19 @@ const Register = ({handleRoute, loadUser}) => {
                                 type="submit" value="Register" 
                                 onClick= {onSubmitSignIn}/>
                         </div>
+                        <div className="flex flex-column justify-around items-center lh-copy mt4 mb3">
+                            <span className="f6">Already have an account?</span>
+                            <span onClick={() => handleRoute('signIn')} 
+                                className="f6 link dim black db pointer">Sign In</span>
+                        </div>
                     </div>
                 </main>
             </article>
-        
         }
-        </>
+        
+        <Footer/>
+        </div>
     )
 }
-export default Register;    
+export default Register;          
                 

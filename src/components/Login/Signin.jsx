@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import Errorform from "../Errorform";
-import Loading from "../Loading";
+import Errorform from "./Errorform";
+import Loading from "./Loading";
+import Footer from "../Footer";
 
 const Signin = ({handleRoute, loadUser}) => {
 
@@ -15,38 +16,38 @@ const Signin = ({handleRoute, loadUser}) => {
     const onPasswordChange = (event) => {
        setSignInPassword(event.target.value)
     }
-    const onSubmitSignIn = () => {
+    const onSubmitSignIn = async () => {
         setLoading(true)
-        fetch('https://smartbrain-api-shueiyang.koyeb.app/signin', {
-            method: 'post',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                email: signInEmail,
-                password: signInPassword
+        try {
+            const response = await fetch('https://smartbrain-api-shueiyang.koyeb.app/signin', {
+                method: 'post',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    email: signInEmail,
+                    password: signInPassword
+                })
             })
-        })
-        .then(response => {
+            const user = await response.json();
             if(response.ok) {
                 setLoading(false)
-                return response.json()
-            .then(user => {
-                loadUser(user)    
-                handleRoute('home') 
-            })
-          } else if (response.status >= 400) {
-            return response.json()
-            .then(err => setError(err))
-          }
-        })
-        .catch(err => setError(err))
-    }    
+                loadUser(user)
+                handleRoute('home')    
+            } else if (response.status >= 400) {
+                setError(user)
+            }
+        } catch (err) {
+            setError(err);
+        } finally {
+            setSignInPassword("");
+        }
+    };    
     
     return (
-        <>
+        <div className='Signin'>
         { (error) ?
             <Errorform 
                 errorMessage= {`${error}`}
-                changeRoute= {()=> {
+                resetRoute= {()=> {
                     setError(null)
                     setLoading(false)
                 }}
@@ -64,6 +65,7 @@ const Signin = ({handleRoute, loadUser}) => {
                                     type="email" 
                                     name="email-address" 
                                     id="email-address"
+                                    value={signInEmail}
                                     onChange = {onEmailChange}
                                     />
                             </div>
@@ -84,9 +86,10 @@ const Signin = ({handleRoute, loadUser}) => {
                                 type="submit" value="Sign in" 
                                 onClick = {onSubmitSignIn}/>
                         </div>
-                        <div className="lh-copy mt3">
-                            <p onClick={() => handleRoute('register')} 
-                                className="f6 link dim black db pointer">Register</p>
+                        <div className="flex flex-column justify-around items-center lh-copy mt4 mb3">
+                            <span className="f6">Don't have an account?</span>
+                            <span onClick={() => handleRoute('register')} 
+                                className="f6 link dim black db pointer">Sign Up</span>
                             {/* For this project I remove Forgot your password feature below */}
                             {/* <a href="#0" class="f6 link dim black db">Forgot your password?</a> */}
                         </div>
@@ -94,7 +97,9 @@ const Signin = ({handleRoute, loadUser}) => {
                 </main>
             </article>
         }
-        </>
+
+        <Footer/>
+        </div>
     )
 }
 export default Signin;

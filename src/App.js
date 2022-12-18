@@ -5,9 +5,8 @@ import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import Rank from './components/Rank/Rank';
 import Particle from './components/Particle';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
-import Signin from './components/Signin/Signin';
-import Register from './components/Register/Register';
-import Footer from './components/Footer';
+import Signin from './components/Login/Signin';
+import Register from './components/Login/Register';
 import './App.css';
 
 
@@ -154,21 +153,18 @@ function App() {
             error={error}
           />          
         </div> 
-        : (route === 'signIn' ?
-            <div className='Signin'>       
-              <Signin handleRoute={onRouteChange}
-                      loadUser= {loadUser}/>
-              <Footer/>
-            </div> 
-            : <div className='Signin'>
-                <Register handleRoute={onRouteChange}
-                            loadUser= {loadUser}/>
-                <Footer/>
-              </div>
-          )
+        : route === 'signIn' ?
+          <Signin 
+            handleRoute={onRouteChange}
+            loadUser= {loadUser}
+          />     
+        : <Register 
+            handleRoute={onRouteChange}
+            loadUser= {loadUser}
+          />
         }          
       </div>
     </>
   );
 }
-export default App; 
+export default App;
