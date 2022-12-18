@@ -38,7 +38,7 @@ function App() {
       })
   } 
   
-  const calculateFaceLocation = (data) => {
+  function calculateFaceLocation (data) {
     const image = document.getElementById('inputImage')
     const width = Number(image.width)
     const height = Number(image.height)
@@ -66,8 +66,8 @@ function App() {
                   bottomRow: height - (clarifyFace.bottom_row * height)
                 }
             }) 
-    }        
-  }
+    }
+  };
 
   const displayFaceBox = (facebox) => { 
     setBox(facebox)
@@ -77,47 +77,44 @@ function App() {
     setInput(event.target.value)
   }
 
-  const onPictureSubmit = () => {
-    setImageUrl(input)
+  async function onPictureSubmit () {
+    setBox({})
     setError(null)
-    fetch('https://smartbrain-api-shueiyang.koyeb.app/imageurl', {
-          method: 'post',
-          headers: {'Content-Type': 'application/json'},
-          body:JSON.stringify({
-            input: input
+    setImageUrl(input)
+    try {
+      const response = await fetch('https://smartbrain-api-shueiyang.koyeb.app/imageurl', {
+            method: 'post',
+            headers: {'Content-Type': 'application/json'},
+            body:JSON.stringify({
+              input: input
+            })
           })
-        })
-    .then(response => {
+      const faceData = await response.json(); 
       if(response.ok) {
-        return response.json()
-        .then(facedata => {
-            fetch('https://smartbrain-api-shueiyang.koyeb.app/image', {
-              method: 'put',
-              headers: {'Content-Type': 'application/json'},
-              body:JSON.stringify({
-                id: user.id
+        setTimeout(()=> {
+          displayFaceBox(calculateFaceLocation(faceData))
+        }, 500);
+        const resp = await fetch('https://smartbrain-api-shueiyang.koyeb.app/image', {
+                method: 'put',
+                headers: {'Content-Type': 'application/json'},
+                body:JSON.stringify({
+                  id: user.id
+                })
               })
-            })
-            .then(resp => resp.json())
-            .then(count => {
-              setUser(prevState => ({
-                ...prevState,
-                entries: count
-              }))
-            })
-            .catch(err => setError(err))
-          
-        displayFaceBox(calculateFaceLocation(facedata))
-        })
-            
+        const count = await resp.json();
+        setUser(prevState => ({
+                  ...prevState,
+                  entries: count
+                }))
+                   
       } else if (response.status >= 400) {
-        return response.json()
-        .then(err => setError(err))
+        setError(faceData)
       }
-    })   
-    .catch(err => setError(err)) 
-  }
-  
+    } catch (err) {
+      setError(err)
+    } 
+  };
+   
   const onRouteChange = (state) => {
     setRoute(state) 
   }       
@@ -127,6 +124,7 @@ function App() {
       setSignIn(true)
     } else if (route === 'signIn') {
       setSignIn(false)
+      setInput("")
       setImageUrl("")
       setBox({})
       setError(null)
@@ -152,7 +150,7 @@ function App() {
           />
           <FaceRecognition
             faceBox={box}
-            imageUrl={imageUrl} 
+            imageUrl={imageUrl}
             error={error}
           />          
         </div> 
