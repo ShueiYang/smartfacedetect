@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import Navigation from './components/Navigation/Navigation';
 import Logo from './components/Logo/Logo';
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
@@ -7,27 +8,69 @@ import Particle from './components/Particle';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import Signin from './components/Login/Signin';
 import Register from './components/Login/Register';
+import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
+
 
 
 function App() {
 
-  const [input, setInput] = useState("")
-  const [imageUrl, setImageUrl] = useState("")
-  const [box, setBox] = useState({})
-  const [error, setError] = useState(null)
-  const [route, setRoute] = useState("signIn")
-  const [signIn, setSignIn] = useState(false)
-  const [user, setUser] = useState({
-                                    id: '',
-                                    name: '',
-                                    email: '',
-                                    entries: 0,
-                                    joined: ''
-                                  })
- 
-// The function below load the User information from Signin and Register component.
-  const loadUser = (data) => {
+  const [input, setInput] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [box, setBox] = useState({});
+  const [error, setError] = useState(null);
+  const [user, setUser] = useState(null);
+  
+  const navigate = useNavigate();
+
+  async function getUser() {
+    try{
+      const response = await fetch('http://localhost:8080/auth/login', {
+        credentials: "include",
+      })
+      if(response.status === 200) {
+        const profile = await response.json();
+        const resp = await fetch('http://localhost:8080/auth/profile', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body:JSON.stringify({
+                  email: profile._json.email
+                })
+              })
+        const data = await resp.json();
+        setUser({
+          id: data.id,
+          name: profile._json.name,
+          email: data.email,
+          entries: data.entries,
+          joined: data.joined
+        })
+      } else {
+        setUser(null); console.log(`Profile reset; ${response.status}`)
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  };
+  
+  useEffect(() => {
+    getUser();
+  }, []);
+
+  useEffect(() => { 
+    // Checking if user is loggedIn or not
+    if (!user) {
+      setInput("")
+      setImageUrl("")
+      setBox({})
+      setError(null);
+    } else {
+      navigate("/home");
+    }
+  }, [user, navigate]);
+    
+  // The function below load the User information from Signin and Register component.
+  function loadUser (data) {
      setUser({
         id: data.id,
         name: data.name,
@@ -35,8 +78,8 @@ function App() {
         entries: data.entries,
         joined: data.joined
       })
-  } 
-  
+  };
+      
   function calculateFaceLocation (data) {
     const image = document.getElementById('inputImage')
     const width = Number(image.width)
@@ -81,8 +124,8 @@ function App() {
     setError(null)
     setImageUrl(input)
     try {
-      const response = await fetch('https://smartbrain-api-shueiyang.koyeb.app/imageurl', {
-            method: 'post',
+      const response = await fetch('http://localhost:8080/imageurl', {
+            method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body:JSON.stringify({
               input: input
@@ -93,8 +136,8 @@ function App() {
         setTimeout(()=> {
           displayFaceBox(calculateFaceLocation(faceData))
         }, 500);
-        const resp = await fetch('https://smartbrain-api-shueiyang.koyeb.app/image', {
-                method: 'put',
+        const resp = await fetch('http://localhost:8080/image', {
+                method: 'PUT',
                 headers: {'Content-Type': 'application/json'},
                 body:JSON.stringify({
                   id: user.id
@@ -114,55 +157,41 @@ function App() {
     } 
   };
    
-  const onRouteChange = (state) => {
-    setRoute(state) 
-  }       
-   
-  useEffect(() => {  
-    if (route === 'home') {
-      setSignIn(true)
-    } else if (route === 'signIn') {
-      setSignIn(false)
-      setInput("")
-      setImageUrl("")
-      setBox({})
-      setError(null)
-    }
-  }, [route]) 
-  
-    
+
   return (
     <>
       <Particle className="particles"/>
     
       <div className="App">
-        <Navigation handleRoute={onRouteChange} isSignIn={signIn} />
-        {route === 'home' ? 
-        <div>
-          <Logo />
-          <Rank data= {user}/>
-          <ImageLinkForm
-            handleChange={onInputChange}
-            handleSumit={onPictureSubmit}
-            faceCount={box}
-            error={error}
-          />
-          <FaceRecognition
-            faceBox={box}
-            imageUrl={imageUrl}
-            error={error}
-          />          
-        </div> 
-        : route === 'signIn' ?
-          <Signin 
-            handleRoute={onRouteChange}
-            loadUser= {loadUser}
-          />     
-        : <Register 
-            handleRoute={onRouteChange}
-            loadUser= {loadUser}
-          />
-        }          
+        <Navigation login={user} setUser={(state)=> setUser(state)}/>
+        <Routes>
+          <Route path='/signin' element={
+            <Signin loadUser={loadUser}/>
+          }/> 
+          <Route path='/register' element={    
+           <Register loadUser={loadUser}/>
+          }/>           
+          <Route path='/home' element={
+            <ProtectedRoute login={user}>
+              <div>
+                <Logo />
+                <Rank data={user}/>
+                <ImageLinkForm
+                  handleChange={onInputChange}
+                  handleSumit={onPictureSubmit}
+                  faceCount={box}
+                  error={error}
+                />
+                <FaceRecognition
+                  faceBox={box}
+                  imageUrl={imageUrl}
+                  error={error}
+                />          
+              </div>
+            </ProtectedRoute> 
+          }/>
+          <Route path='*' element={<Navigate to='/signin'/>}/>
+        </Routes>
       </div>
     </>
   );

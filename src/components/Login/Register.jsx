@@ -1,16 +1,19 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Errorform from "./Errorform";
 import Loading from "./Loading";
 import Footer from "../Footer";
 
-const Register = ({handleRoute, loadUser}) => {
+const Register = ({ loadUser }) => {
 
-    const [regName, setRegName] = useState("")
-    const [regEmail, setRegEmail] = useState("")
-    const [regPassword, setRegPassword] = useState("")
-    const [confirmPassword, setConfirmPassword] = useState("")
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState(null)
+    const [regName, setRegName] = useState("");
+    const [regEmail, setRegEmail] = useState("");
+    const [regPassword, setRegPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    const navigate = useNavigate();
 
     const onNameChange = (event) => {
         setRegName(event.target.value)
@@ -29,10 +32,10 @@ const Register = ({handleRoute, loadUser}) => {
         setConfirmPassword("")
     };
 
-    const onSubmitSignIn = async () => {
+    const onSubmitSignUp = async () => {
         setLoading(true)
         try {
-            const response = await fetch('https://smartbrain-api-shueiyang.koyeb.app/register', {
+            const response = await fetch('http://localhost:8080/register', {
                 method: 'post',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
@@ -45,8 +48,7 @@ const Register = ({handleRoute, loadUser}) => {
             const user = await response.json();
             if(response.ok) {
                 setLoading(false)
-                loadUser(user)        
-                handleRoute('home')
+                loadUser(user)
             } else if (response.status === 400) {
                 setError(user)
             }
@@ -116,18 +118,17 @@ const Register = ({handleRoute, loadUser}) => {
                         <div className="">
                             <input className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
                                 type="submit" value="Register" 
-                                onClick= {onSubmitSignIn}/>
+                                onClick= {onSubmitSignUp}/>
                         </div>
                         <div className="flex flex-column justify-around items-center lh-copy mt4 mb3">
                             <span className="f6">Already have an account?</span>
-                            <span onClick={() => handleRoute('signIn')} 
+                            <span onClick={() => navigate("/signin")} 
                                 className="f6 link dim black db pointer">Sign In</span>
                         </div>
                     </div>
                 </main>
             </article>
         }
-        
         <Footer/>
         </div>
     )

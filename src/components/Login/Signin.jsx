@@ -1,14 +1,19 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Errorform from "./Errorform";
 import Loading from "./Loading";
+import Auth from "./Auth";
 import Footer from "../Footer";
 
-const Signin = ({handleRoute, loadUser}) => {
 
-    const [signInEmail, setSignInEmail] = useState("")
-    const [signInPassword, setSignInPassword] = useState("")
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState(null)
+const Signin = ({ loadUser }) => {
+
+    const [signInEmail, setSignInEmail] = useState("");
+    const [signInPassword, setSignInPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    const navigate = useNavigate();
 
     const onEmailChange = (event) => {
         setSignInEmail(event.target.value)
@@ -19,7 +24,7 @@ const Signin = ({handleRoute, loadUser}) => {
     const onSubmitSignIn = async () => {
         setLoading(true)
         try {
-            const response = await fetch('https://smartbrain-api-shueiyang.koyeb.app/signin', {
+            const response = await fetch('http://localhost:8080/signin', {
                 method: 'post',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
@@ -31,7 +36,6 @@ const Signin = ({handleRoute, loadUser}) => {
             if(response.ok) {
                 setLoading(false)
                 loadUser(user)
-                handleRoute('home')    
             } else if (response.status >= 400) {
                 setError(user)
             }
@@ -54,7 +58,8 @@ const Signin = ({handleRoute, loadUser}) => {
             /> 
         : (loading) ?
             <Loading />     
-        :   <article className="br3 ba b--black-10 mv5 w-100 w-50-m w-25-l mw6 shadow-5 center">
+        : <>
+            <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
                 <main className="pa4 black-80">
                     <div className="measure">
                         <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
@@ -88,7 +93,7 @@ const Signin = ({handleRoute, loadUser}) => {
                         </div>
                         <div className="flex flex-column justify-around items-center lh-copy mt4 mb3">
                             <span className="f6">Don't have an account?</span>
-                            <span onClick={() => handleRoute('register')} 
+                            <span onClick={() => navigate("/register")} 
                                 className="f6 link dim black db pointer">Sign Up</span>
                             {/* For this project I remove Forgot your password feature below */}
                             {/* <a href="#0" class="f6 link dim black db">Forgot your password?</a> */}
@@ -96,8 +101,10 @@ const Signin = ({handleRoute, loadUser}) => {
                     </div>
                 </main>
             </article>
+            
+            <Auth />
+          </>  
         }
-
         <Footer/>
         </div>
     )

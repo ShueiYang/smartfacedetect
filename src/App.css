@@ -69,3 +69,34 @@ a {
 a:hover {
   color: #99360f;
 }
+
+#auth button {
+  background-color: transparent;
+}
+#auth button:hover {
+  color: #072b6e;
+  background-color: rgb(249, 251, 250);
+}
+
+.hr-btn {
+  display: flex;
+  width: 25%;
+  align-items: center;
+  color: rgba(0, 0, 0, 0.45);
+  margin: 8px auto;
+}
+
+.hr-btn::before,
+.hr-btn::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid;
+  margin: 0px 10px;
+}
+
+.google {
+  width: 20%;
+  height: 3.5rem;
+  min-width: 250px;
+  margin: auto;
+}
