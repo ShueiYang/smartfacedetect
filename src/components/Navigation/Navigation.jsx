@@ -5,7 +5,7 @@ const Navigation =({ login, setUser }) => {
     
     const sessionLogOut = () => {
         setUser(null);
-        window.open("http://localhost:8080/auth/logout", "_self");    
+        window.open(`${process.env.REACT_APP_BASE_URL}/auth/logout`, "_self");    
     };
    
     return (login ?  

@@ -11,7 +11,7 @@ import Register from './components/Login/Register';
 import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
 
-
+const { REACT_APP_BASE_URL } = process.env;
 
 function App() {
 
@@ -25,12 +25,12 @@ function App() {
 
   async function getUser() {
     try{
-      const response = await fetch('http://localhost:8080/auth/login', {
+      const response = await fetch(`${REACT_APP_BASE_URL}/auth/login`, {
         credentials: "include",
       })
       if(response.status === 200) {
         const profile = await response.json();
-        const resp = await fetch('http://localhost:8080/auth/profile', {
+        const resp = await fetch(`${REACT_APP_BASE_URL}/auth/profile`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body:JSON.stringify({
@@ -46,7 +46,7 @@ function App() {
           joined: data.joined
         })
       } else {
-        setUser(null); console.log(`Profile reset; ${response.status}`)
+        setUser(null);
       }
     } catch (err) {
       console.log(err)
@@ -124,7 +124,7 @@ function App() {
     setError(null)
     setImageUrl(input)
     try {
-      const response = await fetch('http://localhost:8080/imageurl', {
+      const response = await fetch(`${REACT_APP_BASE_URL}/api/imageurl`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body:JSON.stringify({
@@ -136,7 +136,7 @@ function App() {
         setTimeout(()=> {
           displayFaceBox(calculateFaceLocation(faceData))
         }, 500);
-        const resp = await fetch('http://localhost:8080/image', {
+        const resp = await fetch(`${REACT_APP_BASE_URL}/api/image`, {
                 method: 'PUT',
                 headers: {'Content-Type': 'application/json'},
                 body:JSON.stringify({

@@ -24,7 +24,7 @@ const Signin = ({ loadUser }) => {
     const onSubmitSignIn = async () => {
         setLoading(true)
         try {
-            const response = await fetch('http://localhost:8080/signin', {
+            const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/signin`, {
                 method: 'post',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({

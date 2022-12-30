@@ -5,7 +5,7 @@ import { FcGoogle } from "react-icons/fc";
 const Auth = () => {
 
     const onGoogleSignIn = () => {
-        window.open("http://localhost:8080/auth/google", "_self");    
+        window.open(`${process.env.REACT_APP_BASE_URL}/auth/google`, "_self");    
     };
    
     return (
