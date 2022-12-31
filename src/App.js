@@ -11,33 +11,27 @@ import Register from './components/Login/Register';
 import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
 
-const { REACT_APP_BASE_URL } = process.env;
+import { calculateFaceLocation } from './services/faceDisplay';
+import { httpGetProfile, httpGetUser, imageApiCall, submitMeter } from './services/Api.request';
 
 function App() {
-
+  
   const [input, setInput] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [box, setBox] = useState({});
   const [error, setError] = useState(null);
   const [user, setUser] = useState(null);
+  const [loadScreen, setLoadScreen] = useState(false);
   
   const navigate = useNavigate();
 
   async function getUser() {
     try{
-      const response = await fetch(`${REACT_APP_BASE_URL}/auth/login`, {
-        credentials: "include",
-      })
+      const response = await httpGetUser();
       if(response.status === 200) {
+        setLoadScreen(true)
         const profile = await response.json();
-        const resp = await fetch(`${REACT_APP_BASE_URL}/auth/profile`, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body:JSON.stringify({
-                  email: profile._json.email
-                })
-              })
-        const data = await resp.json();
+        const data = await httpGetProfile(profile._json.email)
         setUser({
           id: data.id,
           name: profile._json.name,
@@ -45,11 +39,11 @@ function App() {
           entries: data.entries,
           joined: data.joined
         })
-      } else {
-        setUser(null);
       }
     } catch (err) {
       console.log(err)
+    } finally {
+      setLoadScreen(false);
     }
   };
   
@@ -79,71 +73,23 @@ function App() {
         joined: data.joined
       })
   };
-      
-  function calculateFaceLocation (data) {
-    const image = document.getElementById('inputImage')
-    const width = Number(image.width)
-    const height = Number(image.height)
-    const boxData = data.outputs[0].data.regions
-    
-    if (boxData.length === 0)
-      return null;
-    
-    else if (boxData.length === 1) {
-      const clarifyFace = data.outputs[0].data.regions[0].region_info.bounding_box
-      return {
-        leftCol: clarifyFace.left_col * width,
-        topRow: clarifyFace.top_row * height,
-        rightCol: width - (clarifyFace.right_col * width),
-        bottomRow: height - (clarifyFace.bottom_row * height)
-      }
-    }
-    else {
-      return boxData.map(item => {
-              const clarifyFace = item.region_info.bounding_box
-                return {
-                  leftCol: clarifyFace.left_col * width,
-                  topRow: clarifyFace.top_row * height,
-                  rightCol: width - (clarifyFace.right_col * width),
-                  bottomRow: height - (clarifyFace.bottom_row * height)
-                }
-            }) 
-    }
-  };
 
-  const displayFaceBox = (facebox) => { 
-    setBox(facebox)
-  }
-  
   const onInputChange = (event) => {
     setInput(event.target.value)
-  }
+  };
 
   async function onPictureSubmit () {
     setBox({})
     setError(null)
     setImageUrl(input)
     try {
-      const response = await fetch(`${REACT_APP_BASE_URL}/api/imageurl`, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body:JSON.stringify({
-              input: input
-            })
-          })
+      const response = await imageApiCall(input);
       const faceData = await response.json(); 
       if(response.ok) {
-        setTimeout(()=> {
-          displayFaceBox(calculateFaceLocation(faceData))
-        }, 500);
-        const resp = await fetch(`${REACT_APP_BASE_URL}/api/image`, {
-                method: 'PUT',
-                headers: {'Content-Type': 'application/json'},
-                body:JSON.stringify({
-                  id: user.id
-                })
-              })
-        const count = await resp.json();
+        setTimeout(async ()=> {
+          setBox(await calculateFaceLocation(faceData));
+        }, 600);
+        const count = await submitMeter(user.id)
         setUser(prevState => ({
                   ...prevState,
                   entries: count
@@ -157,16 +103,16 @@ function App() {
     } 
   };
    
-
   return (
     <>
       <Particle className="particles"/>
     
       <div className="App">
-        <Navigation login={user} setUser={(state)=> setUser(state)}/>
+        <Navigation login={user} setUser={setUser}/>
         <Routes>
           <Route path='/signin' element={
-            <Signin loadUser={loadUser}/>
+            <Signin 
+              loadUser={loadUser} loadScreen={loadScreen}/>
           }/> 
           <Route path='/register' element={    
            <Register loadUser={loadUser}/>

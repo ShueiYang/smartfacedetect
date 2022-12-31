@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 
 
-
 const ImageLinkForm =({handleChange, handleSumit, faceCount, error}) => {
 
     const [countDisplay, setCountDisplay] = useState("No picture for checking...");
@@ -36,7 +35,7 @@ const ImageLinkForm =({handleChange, handleSumit, faceCount, error}) => {
                         onClick = {()=> {handleSumit(); resetCount()}}> Detect </button>
                 </div>
             </div>
-            <p className="f3">{error? "No picture for checking...": countDisplay}</p>  
+            <p className="f3">{error? "No picture for checking..." : countDisplay}</p>  
         </div>
     )
 

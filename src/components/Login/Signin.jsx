@@ -6,7 +6,7 @@ import Auth from "./Auth";
 import Footer from "../Footer";
 
 
-const Signin = ({ loadUser }) => {
+const Signin = ({ loadUser, loadScreen }) => {
 
     const [signInEmail, setSignInEmail] = useState("");
     const [signInPassword, setSignInPassword] = useState("");
@@ -50,13 +50,13 @@ const Signin = ({ loadUser }) => {
         <div className='Signin'>
         { (error) ?
             <Errorform 
-                errorMessage= {`${error}`}
+                error={error}
                 resetRoute= {()=> {
                     setError(null)
                     setLoading(false)
                 }}
             /> 
-        : (loading) ?
+        : (loading || loadScreen) ?
             <Loading />     
         : <>
             <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
