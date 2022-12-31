@@ -1,6 +1,5 @@
 {
   "name": "smartfacedetect",
-  "homepage": "https://ShueiYang.github.io/smartfacedetect",
   "version": "1.2.0",
   "private": true,
   "dependencies": {
