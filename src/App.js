@@ -9,10 +9,12 @@ import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import Signin from './components/Login/Signin';
 import Register from './components/Login/Register';
 import ProtectedRoute from './components/ProtectedRoute';
+import Errorlogin from './components/Login/Errorlogin';
 import './App.css';
 
 import { calculateFaceLocation } from './services/faceDisplay';
 import { httpGetProfile, httpGetUser, imageApiCall, submitMeter } from './services/Api.request';
+
 
 function App() {
   
@@ -136,6 +138,7 @@ function App() {
               </div>
             </ProtectedRoute> 
           }/>
+          <Route path='/loginfailed' element={<Errorlogin/>}/>
           <Route path='*' element={<Navigate to='/signin'/>}/>
         </Routes>
       </div>
