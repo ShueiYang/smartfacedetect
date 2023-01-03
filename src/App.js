@@ -112,7 +112,7 @@ function App() {
       <div className="App">
         <Navigation login={user} setUser={setUser}/>
         <Routes>
-          <Route path='/signin' element={
+          <Route path='/' element={
             <Signin 
               loadUser={loadUser} loadScreen={loadScreen}/>
           }/> 
@@ -139,7 +139,7 @@ function App() {
             </ProtectedRoute> 
           }/>
           <Route path='/loginfailed' element={<Errorlogin/>}/>
-          <Route path='*' element={<Navigate to='/signin'/>}/>
+          <Route path='*' element={<Navigate to='/'/>}/>
         </Routes>
       </div>
     </>

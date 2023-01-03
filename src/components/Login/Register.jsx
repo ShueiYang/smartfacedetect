@@ -122,7 +122,7 @@ const Register = ({ loadUser }) => {
                         </div>
                         <div className="flex flex-column justify-around items-center lh-copy mt4 mb3">
                             <span className="f6">Already have an account?</span>
-                            <span onClick={() => navigate("/signin")} 
+                            <span onClick={() => navigate("/")} 
                                 className="f6 link dim black db pointer">Sign In</span>
                         </div>
                     </div>

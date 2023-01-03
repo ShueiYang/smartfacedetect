@@ -6,7 +6,7 @@ const ProtectedRoute = ({ login, children }) => {
     if(login) {
         return children;
     }
-    return <Navigate to='/signin' />
+    return <Navigate to='/' />
 };
 
 export default ProtectedRoute;

@@ -17,7 +17,7 @@ const navigate = useNavigate();
                         <div className="">
                             <input className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
                                 type="submit" value="Try again" 
-                                onClick= {()=> navigate("/signin")}/>
+                                onClick= {()=> navigate("/")}/>
                         </div>
                     </div>
                 </main>

@@ -10,7 +10,7 @@ const Navigation =({ login, setUser }) => {
    
     return (login ?  
         <nav>
-            <Link to='/signin'>
+            <Link to='/'>
                 <p className="f3 link dim black underline pa3 pointer"
                     onClick={()=> sessionLogOut()}>
                     Sign Out
@@ -19,7 +19,7 @@ const Navigation =({ login, setUser }) => {
         </nav>
            
     :   <nav>
-            <Link to='/signin'>
+            <Link to='/'>
                 <p className="f3 link dim black underline pa3 pointer">
                     Sign in
                 </p>
