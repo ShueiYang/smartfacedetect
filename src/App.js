@@ -25,21 +25,24 @@ function App() {
   const [box, setBox] = useState({});
   const [error, setError] = useState(null);
   const [user, setUser] = useState(null);
+  const [authError, setAuthError] = useState(null);
     
   const navigate = useNavigate();
 
 
   useEffect(() => { 
-    // Checking if user is loggedIn or not
-    if (!user) {
+    // Checking loginError and if user is loggedIn or not
+    if (authError) {
+      navigate("/loginfailed");
+    } else if (!user) {
       setInput("")
       setImageUrl("")
       setBox({})
-      setError(null);
+      setError(null); 
     } else {
       navigate("/home");
     }
-  }, [user, navigate]);
+  }, [user, authError, navigate]);
     
   // The function below load the User information from Signin and Register component.
   function loadUser (data) {
@@ -110,10 +113,10 @@ function App() {
             </ProtectedRoute> 
           }/>
           <Route path='/login' element={
-            <AuthLogin setUser={setUser} setError={setError}/>}
+            <AuthLogin setUser={setUser} setError={setAuthError}/>}
           />
           <Route path='/loginfailed' element={
-            <Errorlogin errorLogin={error} setError={setError}/>}
+            <Errorlogin errorLogin={authError} setError={setAuthError}/>}
           />
           <Route path='*' element={<Navigate to='/'/>}/>
         </Routes>

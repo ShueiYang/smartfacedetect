@@ -1,19 +1,15 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router";
 
 import { httpGetProfile, httpGetUser } from "../../services/Api.request";
 
 
 const AuthLogin = ({ setUser, setError }) => {
 
-    const navigate = useNavigate();
-   
     useEffect(() => {      
         async function getUser() {
             try{
                 const response = await httpGetUser();
                 const profile = await response.json();
-                console.log("Oauth is TRIGGER!!")
                 if(response.status === 200) {
                     const data = await httpGetProfile(profile._json.email)
                     setUser({
@@ -22,19 +18,17 @@ const AuthLogin = ({ setUser, setError }) => {
                         email: data.email,
                         entries: data.entries,
                         joined: data.joined
-                    })
+                    });
                 } else {
-                    setError(profile)
-                    navigate("/loginfailed") 
+                    setError(profile);
                 }
             } catch (err) {
                 setError(err)
-                navigate("/loginfailed") 
             } 
         };
         getUser();
     
-    }, [setUser, setError, navigate]);
+    }, [setUser, setError]);
     
 
     return (
