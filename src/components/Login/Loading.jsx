@@ -13,9 +13,8 @@ const Loading = () => {
                 </div>
             </main>
         </article>    
-                       
     )
-}
+};
 export default Loading;          
                     
                 

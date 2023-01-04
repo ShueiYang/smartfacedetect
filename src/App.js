@@ -9,11 +9,13 @@ import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import Signin from './components/Login/Signin';
 import Register from './components/Login/Register';
 import ProtectedRoute from './components/ProtectedRoute';
+import AuthLogin from './components/Login/Authlogin';
 import Errorlogin from './components/Login/Errorlogin';
+
 import './App.css';
 
 import { calculateFaceLocation } from './services/faceDisplay';
-import { httpGetProfile, httpGetUser, imageApiCall, submitMeter } from './services/Api.request';
+import { imageApiCall, submitMeter } from './services/Api.request';
 
 
 function App() {
@@ -23,35 +25,9 @@ function App() {
   const [box, setBox] = useState({});
   const [error, setError] = useState(null);
   const [user, setUser] = useState(null);
-  const [loadScreen, setLoadScreen] = useState(false);
-  
+    
   const navigate = useNavigate();
 
-  async function getUser() {
-    try{
-      const response = await httpGetUser();
-      if(response.status === 200) {
-        setLoadScreen(true)
-        const profile = await response.json();
-        const data = await httpGetProfile(profile._json.email)
-        setUser({
-          id: data.id,
-          name: profile._json.name,
-          email: data.email,
-          entries: data.entries,
-          joined: data.joined
-        })
-      }
-    } catch (err) {
-      console.log(err)
-    } finally {
-      setLoadScreen(false);
-    }
-  };
-  
-  useEffect(() => {
-    getUser();
-  }, []);
 
   useEffect(() => { 
     // Checking if user is loggedIn or not
@@ -112,13 +88,8 @@ function App() {
       <div className="App">
         <Navigation login={user} setUser={setUser}/>
         <Routes>
-          <Route path='/' element={
-            <Signin 
-              loadUser={loadUser} loadScreen={loadScreen}/>
-          }/> 
-          <Route path='/register' element={    
-           <Register loadUser={loadUser}/>
-          }/>           
+          <Route path='/' element={<Signin loadUser={loadUser}/>}/> 
+          <Route path='/register' element={<Register loadUser={loadUser}/>}/>           
           <Route path='/home' element={
             <ProtectedRoute login={user}>
               <div>
@@ -138,7 +109,12 @@ function App() {
               </div>
             </ProtectedRoute> 
           }/>
-          <Route path='/loginfailed' element={<Errorlogin/>}/>
+          <Route path='/login' element={
+            <AuthLogin setUser={setUser} setError={setError}/>}
+          />
+          <Route path='/loginfailed' element={
+            <Errorlogin errorLogin={error} setError={setError}/>}
+          />
           <Route path='*' element={<Navigate to='/'/>}/>
         </Routes>
       </div>

@@ -11,7 +11,7 @@ const Register = ({ loadUser }) => {
     const [regPassword, setRegPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [loginError, setLoginError] = useState(null);
 
     const navigate = useNavigate();
 
@@ -47,25 +47,25 @@ const Register = ({ loadUser }) => {
             })
             const user = await response.json();
             if(response.ok) {
-                setLoading(false)
                 loadUser(user)
-            } else if (response.status === 400) {
-                setError(user)
+            } else if (response.status >= 400) {
+                setLoginError(user)
             }
         } catch (err) {
-            setError(err)
+            setLoginError(err)
         } finally {
+            setLoading(false)
             resetPassword();
         }
     };
 
     return (
         <div className='Signin'> 
-        { (error) ?
+        { (loginError) ?
             <Errorform 
-                errorMessage= {`${error}`}
-                resetRoute= {()=> {
-                    setError(null)
+                error={loginError}
+                resetRoute={()=> {
+                    setLoginError(null)
                     setLoading(false)
                 }}
             />

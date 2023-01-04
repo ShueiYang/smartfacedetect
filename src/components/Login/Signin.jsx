@@ -6,12 +6,12 @@ import Auth from "./Auth";
 import Footer from "../Footer";
 
 
-const Signin = ({ loadUser, loadScreen }) => {
+const Signin = ({ loadUser }) => {
 
     const [signInEmail, setSignInEmail] = useState("");
     const [signInPassword, setSignInPassword] = useState("");
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [loginError, setLoginError] = useState(null);
 
     const navigate = useNavigate();
 
@@ -34,29 +34,29 @@ const Signin = ({ loadUser, loadScreen }) => {
             })
             const user = await response.json();
             if(response.ok) {
-                setLoading(false)
                 loadUser(user)
             } else if (response.status >= 400) {
-                setError(user)
+                setLoginError(user)
             }
         } catch (err) {
-            setError(err);
+            setLoginError(err);
         } finally {
+            setLoading(false)
             setSignInPassword("");
         }
     };    
     
     return (
         <div className='Signin'>
-        { (error) ?
+        { (loginError) ?
             <Errorform 
-                error={error}
+                error={loginError}
                 resetRoute= {()=> {
-                    setError(null)
+                    setLoginError(null)
                     setLoading(false)
                 }}
             /> 
-        : (loading || loadScreen) ?
+        : (loading) ?
             <Loading />     
         : <>
             <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">

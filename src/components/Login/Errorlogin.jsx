@@ -1,7 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const Errorlogin = () => {
+const Errorlogin = ({ errorLogin, setError }) => {
+
+const serverError = `You must authenticate to get access, or my code suck and some errors occur,
+    so you are unable to authenticate... plz contact the admin`
 
 const navigate = useNavigate();   
     
@@ -11,18 +14,19 @@ const navigate = useNavigate();
                 <main className="pa4 black-80">
                     <div className="measure">
                         <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
-                            <legend className="f3 fw6 ph0 mh0">My code suck and some errors occur 
-                                so you are unable to log in...</legend>
+                            <legend className="f3 fw6 ph0 mh0">
+                                {errorLogin ? errorLogin : serverError}
+                            </legend>
                         </fieldset>
                         <div className="">
                             <input className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
                                 type="submit" value="Try again" 
-                                onClick= {()=> navigate("/")}/>
+                                onClick= {()=> {setError(null); navigate("/")}}/>
                         </div>
                     </div>
                 </main>
             </article>    
         </div>
     )
-}
+};
 export default Errorlogin;
