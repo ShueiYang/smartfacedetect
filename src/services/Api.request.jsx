@@ -5,10 +5,6 @@ async function httpGetUser() {
     return await fetch(`${REACT_APP_BASE_URL}/auth/login`, {
         mode: "cors",
         credentials: "include",
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Credentials': true,
-        }
       })
 };
 
