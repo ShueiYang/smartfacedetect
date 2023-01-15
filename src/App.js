@@ -77,7 +77,10 @@ function App() {
                 }))
                    
       } else if (response.status >= 400) {
-        setError(faceData)
+        if(faceData.message === "Error: Failure") {
+          return setError("Image not found")
+        }
+        setError(faceData.message)
       }
     } catch (err) {
       setError(err)
