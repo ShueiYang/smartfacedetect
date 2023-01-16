@@ -1,6 +1,6 @@
 {
   "name": "smartfacedetect",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.4",
@@ -42,7 +42,6 @@
     ]
   },
   "overrides": {
-    "nth-check@1.0.2": "2.1.1",
-    "json5@1.0.1": "2.2.2"
+    "nth-check@1.0.2": "2.1.1"
   }
 }
