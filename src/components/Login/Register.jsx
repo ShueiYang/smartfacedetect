@@ -15,46 +15,46 @@ const Register = ({ loadUser }) => {
 
     const navigate = useNavigate();
 
-    const onNameChange = (event) => {
-        setRegName(event.target.value)
+    function onNameChange(event) {
+        setRegName(event.target.value);
     };
-    const onEmailChange = (event) => {
-        setRegEmail(event.target.value)
+    function onEmailChange(event) {
+        setRegEmail(event.target.value);
     };
-    const onPasswordChange = (event) => {
-       setRegPassword(event.target.value)
+    function onPasswordChange(event) {
+        setRegPassword(event.target.value);
     };
-    const onConfirmPassword = (event) => {
-        setConfirmPassword(event.target.value)
+    function onConfirmPassword(event) {
+        setConfirmPassword(event.target.value);
     };
-    const resetPassword = () => {
-        setRegPassword("")
-        setConfirmPassword("")
+    function resetPassword() {
+        setRegPassword("");
+        setConfirmPassword("");
     };
 
-    const onSubmitSignUp = async () => {
-        setLoading(true)
+    async function onSubmitSignUp() {
+        setLoading(true);
         try {
             const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/register`, {
-                method: 'post',
-                headers: {'Content-Type': 'application/json'},
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     name: regName,
                     email: regEmail,
                     password: regPassword,
                     checkpassword: confirmPassword
                 })
-            })
+            });
             const user = await response.json();
-            if(response.ok) {
-                loadUser(user)
+            if (response.ok) {
+                loadUser(user);
             } else if (response.status >= 400) {
-                setLoginError(user)
+                setLoginError(user);
             }
         } catch (err) {
-            setLoginError(err)
+            setLoginError(err);
         } finally {
-            setLoading(false)
+            setLoading(false);
             resetPassword();
         }
     };

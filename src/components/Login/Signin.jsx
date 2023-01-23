@@ -15,33 +15,34 @@ const Signin = ({ loadUser }) => {
 
     const navigate = useNavigate();
 
-    const onEmailChange = (event) => {
-        setSignInEmail(event.target.value)
-    }
-    const onPasswordChange = (event) => {
-       setSignInPassword(event.target.value)
-    }
-    const onSubmitSignIn = async () => {
-        setLoading(true)
+    function onEmailChange(event) {
+        setSignInEmail(event.target.value);
+    };
+    function onPasswordChange(event) {
+        setSignInPassword(event.target.value);
+    };
+    
+    async function onSubmitSignIn() {
+        setLoading(true);
         try {
             const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/signin`, {
-                method: 'post',
-                headers: {'Content-Type': 'application/json'},
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     email: signInEmail,
                     password: signInPassword
                 })
-            })
+            });
             const user = await response.json();
-            if(response.ok) {
-                loadUser(user)
+            if (response.ok) {
+                loadUser(user);
             } else if (response.status >= 400) {
-                setLoginError(user)
+                setLoginError(user);
             }
         } catch (err) {
             setLoginError(err);
         } finally {
-            setLoading(false)
+            setLoading(false);
             setSignInPassword("");
         }
     };    
