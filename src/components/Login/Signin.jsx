@@ -47,19 +47,25 @@ const Signin = ({ loadUser }) => {
         }
     };    
     
-    return (
-        <div className='Signin'>
-        { (loginError) ?
+    
+    if(loginError) {
+        return (
             <Errorform 
                 error={loginError}
-                resetRoute= {()=> {
+                resetRoute={()=> {
                     setLoginError(null)
                     setLoading(false)
                 }}
-            /> 
-        : (loading) ?
-            <Loading />     
-        : <>
+            />
+        )
+    }
+    if(loading) {
+       return <Loading />  
+    }    
+     
+    return (
+        <div className="Signin">
+          <>
             <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
                 <main className="pa4 black-80">
                     <div className="measure">
@@ -102,12 +108,11 @@ const Signin = ({ loadUser }) => {
                     </div>
                 </main>
             </article>
-            
+          
             <Auth />
           </>  
-        }
-        <Footer/>
+          <Footer/>
         </div>
     )
 }
-export default Signin;
+export default Signin;          

@@ -72,10 +72,10 @@ function App() {
         }, 600);
         const count = await submitMeter(user.id)
         setUser(prevState => ({
-                  ...prevState,
-                  entries: count
-                }))
-                   
+          ...prevState,
+          entries: count
+        }))
+                        
       } else if (response.status >= 400) {
         if(faceData.message === "Error: Failure") {
           return setError("Image not found")

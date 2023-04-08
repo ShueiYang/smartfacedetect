@@ -6,30 +6,27 @@ import Footer from "../Footer";
 
 const Register = ({ loadUser }) => {
 
-    const [regName, setRegName] = useState("");
-    const [regEmail, setRegEmail] = useState("");
-    const [regPassword, setRegPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [loginError, setLoginError] = useState(null);
-
+    const [regForm, setRegForm] = useState({
+        name: "",
+        email: "",
+        password: "",
+        checkPassword:""
+    })
     const navigate = useNavigate();
 
-    function onNameChange(event) {
-        setRegName(event.target.value);
-    };
-    function onEmailChange(event) {
-        setRegEmail(event.target.value);
-    };
-    function onPasswordChange(event) {
-        setRegPassword(event.target.value);
-    };
-    function onConfirmPassword(event) {
-        setConfirmPassword(event.target.value);
-    };
+    function handleChange (event) {
+        const { name, value } = event.target;
+        setRegForm({ ...regForm, [name]: value })
+    }
+
     function resetPassword() {
-        setRegPassword("");
-        setConfirmPassword("");
+        setRegForm({
+            ...regForm,
+            password: "",
+            checkPassword: "",
+        })
     };
 
     async function onSubmitSignUp() {
@@ -38,13 +35,8 @@ const Register = ({ loadUser }) => {
             const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    name: regName,
-                    email: regEmail,
-                    password: regPassword,
-                    checkpassword: confirmPassword
-                })
-            });
+                body: JSON.stringify(regForm)
+            }); console.log({regForm})
             const user = await response.json();
             if (response.ok) {
                 loadUser(user);
@@ -52,6 +44,7 @@ const Register = ({ loadUser }) => {
                 setLoginError(user);
             }
         } catch (err) {
+            console.error(err)
             setLoginError(err);
         } finally {
             setLoading(false);
@@ -59,9 +52,9 @@ const Register = ({ loadUser }) => {
         }
     };
 
-    return (
-        <div className='Signin'> 
-        { (loginError) ?
+
+    if(loginError) {
+        return (
             <Errorform 
                 error={loginError}
                 resetRoute={()=> {
@@ -69,9 +62,15 @@ const Register = ({ loadUser }) => {
                     setLoading(false)
                 }}
             />
-        : (loading) ?
-            <Loading />  
-        :   <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
+        )
+    }
+    if(loading) {
+       return <Loading />  
+    }  
+
+    return (
+        <div className='Signin'> 
+          <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
                 <main className="pa4 black-80">
                     <div className="measure">
                         <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
@@ -82,19 +81,19 @@ const Register = ({ loadUser }) => {
                                     type="text" 
                                     name="name" 
                                     id="name"
-                                    value={regName}
-                                    onChange = {onNameChange}
-                                    />
+                                    value={regForm.name}
+                                    onChange = {handleChange}
+                                />
                             </div>
                             <div className="mt3">
                                 <label className="db fw6 lh-copy f6" htmlFor="email-address">Email</label>
                                 <input className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" 
                                     type="email" 
-                                    name="email-address" 
-                                    id="email-address"
-                                    value={regEmail}
-                                    onChange = {onEmailChange}
-                                    />
+                                    name="email" 
+                                    id="email"
+                                    value={regForm.email}
+                                    onChange = {handleChange}
+                                />
                             </div>
                             <div className="mv3">
                                 <label className="db fw6 lh-copy f6" htmlFor="password">Password</label>
@@ -102,17 +101,19 @@ const Register = ({ loadUser }) => {
                                     type="password" 
                                     name="password" 
                                     id="password"
-                                    onChange = {onPasswordChange}
-                                    />
+                                    value={regForm.password}
+                                    onChange = {handleChange}
+                                />
                             </div>
                             <div className="mv3">
                                 <label className="db fw6 lh-copy f6" htmlFor="password">Confirm Password</label>
                                 <input className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" 
                                     type="password" 
-                                    name="password" 
-                                    id="password2"
-                                    onChange = {onConfirmPassword}
-                                    />
+                                    name="checkPassword" 
+                                    id="checkPassword"
+                                    value={regForm.checkPassword}
+                                    onChange = {handleChange}
+                                />
                             </div>
                         </fieldset>
                         <div className="">
@@ -128,7 +129,6 @@ const Register = ({ loadUser }) => {
                     </div>
                 </main>
             </article>
-        }
         <Footer/>
         </div>
     )

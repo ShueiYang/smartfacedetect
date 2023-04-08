@@ -9,7 +9,7 @@ const Errorform = ({ error, resetRoute }) => {
             <main className="pa4 black-80">
                 <div className="measure">
                     <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
-                        <legend className="f3 fw6 ph0 mh0">{error}</legend>
+                        <legend className="f3 fw6 ph0 mh0">{error.message}</legend>
                     </fieldset>
                     <div className="">
                         <input className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
